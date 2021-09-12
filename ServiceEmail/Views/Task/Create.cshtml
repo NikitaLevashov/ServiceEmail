@@ -1,0 +1,116 @@
+﻿@model ServiceEmail.UI.Models.TaskModel.TaskInfo
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>TaskInfo</h4>
+<hr />
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            @*<div class=checkbox checkboxlist col-sm-9">
+                    @foreach (var c in ViewBag.Api)
+                    {
+                        <input type="checkbox" name="selectedGenres" value="@c.Id" />@c.Name <br />
+                    }
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </div>*@
+            <div>
+                @foreach (var c in ViewBag.Api)
+                {
+                    <input id="color" name="color" type="radio" value="red" />
+                    <span>@c.Name</span> <br />
+                }
+
+                @*<input id="color" name="color" type="radio" value="red" />
+                    <span>красный</span> <br />
+                    <input id="color" name="color" type="radio" value="blue" />
+                    <span>синий</span> <br />
+                    <input checked="checked" id="color" name="color" type="radio" value="green" />
+                    <span>зеленый</span>*@
+            </div>
+            <div>Choose please api for you</div>
+            <div class="form-group">
+                <div>
+                    <label asp-for="FreeApi">Wheather api</label>
+                    <input asp-for="FreeApi" type="radio" name="FreeApi" value="Wheather" />
+                    <span asp-validation-for="FreeApi" class="text-danger"></span>
+                </div>
+                <div>
+                    <label asp-for="FreeApi"> Sport api</label>
+                    <input asp-for="FreeApi" type="radio" name="FreeApi" value="Sport" />
+                    <span asp-validation-for="FreeApi" class="text-danger"></span>
+                </div>
+                <div class="showstore">Введите плиз клуб:</div>
+                <div class="showbrand">Введите плиз город</div>
+            </div>
+            <div class="form-group">
+                <label asp-for="AppSettings" class="control-label"></label>
+                <input asp-for="AppSettings" class="form-control" />
+                <span asp-validation-for="AppSettings" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PeriodicityTask" class="control-label"></label>
+                <input asp-for="PeriodicityTask" class="form-control" />
+                <span asp-validation-for="PeriodicityTask" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MomentTaskStarts" class="control-label"></label>
+                <input asp-for="MomentTaskStarts" class="form-control" />
+                <span asp-validation-for="MomentTaskStarts" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('.showstore').hide();
+        $('.showbrand').hide();
+
+        $("input[name=FreeApi]:radio").click(function () {
+
+            if ($('input[name=FreeApi]:checked').val() == "Wheather") {
+                $('.showstore').hide();
+                $('.showbrand').show();
+            } else if ($('input[name=FreeApi]:checked').val() == "Sport") {
+                $('.showstore').show();
+                $('.showbrand').hide();
+
+            }
+        });
+    });
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+

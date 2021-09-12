@@ -2,6 +2,66 @@
     ViewData["Title"] = "Home Page";
 }
 
+@model ServiceEmail.UI.Models.User.User
+
+@{
+    Layout = null;
+}
+
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="~/css/site.css" />
+<section class="vh-100" style="background-color: #eee;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-lg-9 col-xl-7">
+                <div class="card rounded-3">
+                    <div class="card-body p-4">
+
+                        <h4 class="text-center my-3 pb-3">@Model.Name @Model.LastName profile</h4>
+
+                        <form class="row row-cols-lg-auto g-3 justify-content-center align-items-center mb-4 pb-2">
+
+                            <div class="col-12">
+                                <a asp-action="Create" asp-controller="Task" type="submit" class="btn btn-warning">Add task</a>
+                            </div>
+                        </form>
+
+                        <table class="table mb-4">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name.</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col"></th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            @foreach (var t in Model.taskInfo)
+                             {
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>@t.Description</td>
+                                        <td>@t.LastDateTime</td>
+                                        <td>
+                                            <a asp-action="Index" asp-controller="Home" type="submit" class="btn btn-danger">Delete</a>
+                                            <a asp-action="Index" asp-controller="Home" type="submit" class="btn btn-success ms-1">Finished</a>
+                                        </td>
+                                    </tr>
+                               </tbody>
+                             }                            
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
