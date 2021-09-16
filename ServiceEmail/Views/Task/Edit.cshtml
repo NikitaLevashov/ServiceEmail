@@ -1,0 +1,96 @@
+﻿@model ServiceEmail.UI.Models.TaskModel.TaskInfo
+
+<h1>Edit task</h1>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div></div>
+            <div>Choose please api for you: </div>
+            <div class="form-group">
+                <div>
+                    <label asp-for="FreeApi">Wheather api</label>
+                    <input asp-for="FreeApi" type="radio" name="FreeApi" value="Weather" />
+                    <span asp-validation-for="FreeApi" class="text-danger"></span>
+                </div>
+                <div>
+                    <label asp-for="FreeApi">Coronavirus api</label>
+                    <input asp-for="FreeApi" type="radio" name="FreeApi" value="Coronavirus" />
+                    <span asp-validation-for="FreeApi" class="text-danger"></span>
+                </div>
+                <div>
+                    <label asp-for="FreeApi">Metal price</label>
+                    <input asp-for="FreeApi" type="radio" name="FreeApi" value="MetalPrices" />
+                    <span asp-validation-for="FreeApi" class="text-danger"></span>
+                </div>
+                <h1></h1>
+                <div class="showweather">Please add city (for example Minsk, London):</div>
+                <div class="showlocatcode">Please choose a location code (for example US, FR):</div>
+                <div class="showmetalprice">Select currency symbol (for example EUR, USD):</div>
+            </div>
+            <div class="form-group">
+                <input asp-for="AppSettings" class="form-control" />
+                <span asp-validation-for="AppSettings" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Add a message sending interval in days:                
+                <input asp-for="PeriodicityTask" class="form-control" />
+                <span asp-validation-for="PeriodicityTask" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                When the task starts:
+                <input asp-for="MomentTaskStarts" class="form-control" />
+                <span asp-validation-for="MomentTaskStarts" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Edit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" asp-controller="Home">Back to List</a>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('.showweather').hide();
+        $('.showlocatcode').hide();
+        $('.showmetalprice').hide();
+        $("input[name=FreeApi]:radio").click(function () {
+            if ($('input[name=FreeApi]:checked').val() == "Weather") {
+                $('.showweather').show();
+                $('.showlocatcode').hide();
+                $('.showmetalprice').hide();
+            } else if ($('input[name=FreeApi]:checked').val() == "Coronavirus") {
+                $('.showweather').hide();
+                $('.showmetalprice').hide();
+                $('.showlocatcode').show();
+            } else if ($('input[name=FreeApi]:checked').val() == "MetalPrices") {
+                $('.showweather').hide();               
+                $('.showlocatcode').hide();
+                $('.showmetalprice').show();
+            } 
+        });
+    });
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

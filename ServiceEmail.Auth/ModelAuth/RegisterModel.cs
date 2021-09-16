@@ -9,6 +9,12 @@ namespace ServiceEmail.Auth.ModelAuth
 {
     public class RegisterModel
     {
+        [Required(ErrorMessage = "Не указан Name")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "Не указан LastName")]
+        public string LastName { get; set; }
+
         [Required(ErrorMessage = "Не указан Email")]
         public string Email { get; set; }
 

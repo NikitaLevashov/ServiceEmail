@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ServiceEmail.BLL.ModelBLL.TaskInfoBLL
 {
@@ -17,5 +13,6 @@ namespace ServiceEmail.BLL.ModelBLL.TaskInfoBLL
         public string FreeApi { get; set; }
         public string AppSettings { get; set; }
         public string DataOfTask { get; set; }
+        public int UserId { get; set; }
     }
 }

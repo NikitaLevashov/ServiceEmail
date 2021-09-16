@@ -2,9 +2,10 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using ServiceEmail.Auth.ModelAuth;
+using ServiceEmail.BLL.Interfaces;
+using ServiceEmail.UI.Mapping;
 using ServiceEmail.BLL.SessionService;
-using ServiceEmail.UI.Models.TaskModel;
-using ServiceEmail.UI.Models.User;
+using ServiceEmail.UI.Models.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,24 +16,12 @@ namespace ServiceEmail.UI.Controllers
 {
     public class AccountController : Controller
     {
-        List<User> context = new List<User>();
-        public AccountController()
+        private readonly IUserService _service;
+        public AccountController(IUserService service)
         {
-            var list = new List<TaskInfo>()
-            {
-                //new TaskInfo(){Name = "Wheather", Description = "Info by wheather", LastDateTime = new DateTime(12,12,1992)},
-                //new TaskInfo(){Name = "Play", Description = "Info abput play", LastDateTime = new DateTime(12,12,1992)},
-                //new TaskInfo(){Name = "Kino", Description = "Info by wheather", LastDateTime = new DateTime(12,12,1992)}
-
-            };
-
-            context = new List<User>()
-            {
-                new User(){Name = "Nikita", LastName = "Levashov",Password = "20021992", Email = "arhangel205@mail.ru", taskInfo = list},
-                new User(){Name = "Nikita", LastName = "Levashov",Password = "20021992", Email = "arhangel205@mail.ru", taskInfo = list},
-                new User(){Name = "Nikita", LastName = "Levashov",Password = "20021992", Email = "arhangel205@mail.ru", taskInfo = list},
-            };
+            _service = service ??throw new ArgumentNullException();
         }
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -44,16 +33,18 @@ namespace ServiceEmail.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = context.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
+                User user = _service.GetAll().MapToEnumerableUsers().FirstOrDefault(u 
+                    => u.Email == model.Email && u.Password == model.Password);
+
                 if (user != null)
                 {
-                    await Authenticate(model.Email); // аутентификация
+                    await Authenticate(user);
 
                     HttpContext.Session.Set<User>("user", user);
-                    //TempData["user"] = user;
                     return RedirectToAction("Index", "Home");
                 }
-                ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+
+                ModelState.AddModelError("", "Not correct login and(or) password");
             }
             return View(model);
         }
@@ -69,33 +60,35 @@ namespace ServiceEmail.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = context.FirstOrDefault(u => u.Email == model.Email);
+                User user = _service.GetAll().MapToEnumerableUsers().FirstOrDefault(u 
+                    => u.Email == model.Email && u.Password == model.Password);
+
                 if (user == null)
                 {
-                    // добавляем пользователя в бд
-                    context.Add(new User { Email = model.Email, Password = model.Password });
-                    //await db.SaveChangesAsync();
+                    _service.Create(new User { Email = model.Email, Password = model.Password,
+                        LastName = model.LastName, Name = model.Name, Role = new Role { Id = 1} }.MapToBLLUser());
 
-                    await Authenticate(model.Email); // аутентификация
+                    await Authenticate(user);
 
                     return RedirectToAction("Login", "Account");
                 }
                 else
-                    ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+                    ModelState.AddModelError("", "Not correct login and(or) password");
             }
             return View(model);
         }
 
-        private async Task Authenticate(string userName)
+        private async Task Authenticate(User user)
         {
-            // создаем один claim
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
             };
-            // создаем объект ClaimsIdentity
-            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-            // установка аутентификационных куки
+
+            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType,
+                ClaimsIdentity.DefaultRoleClaimType);
+
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
 

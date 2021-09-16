@@ -1,10 +1,7 @@
 ﻿using ServiceEmail.UI.Models.TaskModel;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace ServiceEmail.UI.Models.User
+namespace ServiceEmail.UI.Models.UserModel
 {
     public class User
     {
@@ -14,5 +11,7 @@ namespace ServiceEmail.UI.Models.User
         public string Email { get; set; }
         public string Password { get; set; }
         public List<TaskInfo> taskInfo { get; set; }
+        public Role Role { get; set; }
+        public int? RoleId { get; set; }
     }
 }

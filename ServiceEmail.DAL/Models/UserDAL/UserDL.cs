@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ServiceEmail.BLL.ModelBLL;
 
-namespace ServiceEmail.BLL.ModelBLL.User
+namespace ServiceEmail.DAL.Models.UserDAL
 {
-    public class UserBLL
+    public class UserDL
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public List<TaskInfoBLL.TaskInfoBLL> taskInfo { get; set; }
+        public RoleDL Role { get; set; }
+        public List<TaskInfoDAL.TaskInfoDAL> taskInfo { get; set; }
     }
 }

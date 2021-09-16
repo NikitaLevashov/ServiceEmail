@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ServiceEmail.BLL.Interfaces;
+using ServiceEmail.BLL.Service;
+using ServiceEmail.DAL.Interfaces;
+using ServiceEmail.DAL.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,9 +30,13 @@ namespace ServiceEmail
         {
             services.AddControllersWithViews();
             services.AddDistributedMemoryCache();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ITaskRepository, TaskRepository>();
+            services.AddScoped<ITaskService, TaskService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddSession();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options => //CookieAuthenticationOptions
+                .AddCookie(options =>
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
                 });
@@ -52,7 +60,7 @@ namespace ServiceEmail
             app.UseStaticFiles();
 
             app.UseRouting();
-            app.UseAuthentication();    // аутентификация
+            app.UseAuthentication();  
             app.UseAuthorization();
             app.UseSession();
 

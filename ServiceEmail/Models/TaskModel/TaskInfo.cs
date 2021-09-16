@@ -1,29 +1,28 @@
-﻿using ServiceEmail.UI.Controllers;
+﻿using ServiceEmail.BLL.CronService;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace ServiceEmail.UI.Models.TaskModel
 {
     public class TaskInfo
     {
         public int Id { get; set; }
+        public int UserId { get; set; }
 
         [Required]
         [StringLength(10)]
         public string Name { get; set; }
 
         [Required]
-        [StringLength(10)]
+        [StringLength(30)]
         public string Description { get; set; }
 
         [Required]
         public DateTime LastDateTime { get; set; }
 
         [Required]
-        [Range(0,24)]
+        [Range(0,30)]
         public int PeriodicityTask { get; set; }
 
         [Required]

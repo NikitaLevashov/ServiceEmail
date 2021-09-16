@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ServiceEmail.BLL.ApiService;
+using ServiceEmail.BLL.CronService;
+using ServiceEmail.BLL.Interfaces;
 using ServiceEmail.BLL.SessionService;
 using ServiceEmail.UI.Mapping;
 using ServiceEmail.UI.Models.TaskModel;
-using ServiceEmail.UI.Models.User;
+using ServiceEmail.UI.Models.UserModel;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,61 +14,123 @@ namespace ServiceEmail.UI.Controllers
 {
     public class TaskController : Controller
     {
-        public IActionResult Index()
+        private readonly IUserService _service;
+        private readonly ITaskService _serviceTask;
+        public TaskController(IUserService service, ITaskService serviceTask)
         {
-            return View();
+            _service = service ?? throw new ArgumentNullException();
+            _serviceTask = serviceTask ?? throw new ArgumentNullException();
         }
 
         [HttpGet]
         public IActionResult Create()
         {
-
-            var list = new List<TaskInfo>()
-            {
-                //new TaskInfo(){Name = "Wheather", Description = "Info by wheather", LastDateTime = new DateTime(12,12,1992)},
-                //new TaskInfo(){Name = "Play", Description = "Info abput play", LastDateTime = new DateTime(12,12,1992)},
-                //new TaskInfo(){Name = "Kino", Description = "Info by wheather", LastDateTime = new DateTime(12,12,1992)}
-
-            };
-
-            var listUser = new List<User>()
-            {
-                new User(){Name = "Nikita", LastName = "Levashov", Email = "20021992", taskInfo = list},
-                new User(){Name = "Pasha", LastName = "Ivanov", Email = "20021992", taskInfo = list},
-                new User(){Name = "Igor", LastName = "Ivanov", Email = "20021992", taskInfo = list},
-            };
-
-            ViewBag.Api = list;
             return View();
         }
 
         [HttpPost]
         public IActionResult Create(TaskInfo taskInfo)
         {
-            User user = HttpContext.Session.Get<User>("user");
-            
-            taskInfo.DataOfTask = ApiService.GetJsonInfo(taskInfo.FreeApi, taskInfo.AppSettings);
-            taskInfo.LastDateTime = DateTime.Now;
+            User user = HttpContext.Session.Get<User>("user");            
+            taskInfo.DataOfTask = ApiService.GetJsonInfo(taskInfo.MapToBLLTask());
 
+            taskInfo.LastDateTime = DateTime.Now;
+            taskInfo.UserId = user.Id;
             user.taskInfo.Add(taskInfo);
 
-            Helper.user = user;
+            var cron = new Cron().CronSetting(user.MapToBLLUser());
+            user.taskInfo.Last().EmailSheduler = cron;
+            cron.Start();
 
-            var t = new EmailScheduler();
-            
-            user.taskInfo.Last().EmailSheduler = t;
-
-            var e = user.MapperForBLL();
-
+            _serviceTask.Create(taskInfo.MapToBLLTask());
             HttpContext.Session.Set<User>("user", user);
-            //t.Start();
 
             return RedirectToAction("Index","Home");
         }
-    }
 
-    public static class Helper
-    {
-        public static User user;
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            User user = HttpContext.Session.Get<User>("user");
+            var task = user.taskInfo.FirstOrDefault(x => x.Id == id);
+
+            return View(task);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(TaskInfo taskInfo)
+        {
+            User user = HttpContext.Session.Get<User>("user");
+
+            var itemToRemove = user.taskInfo.SingleOrDefault(r => r.Id == taskInfo.Id);
+            if (itemToRemove != null)
+                user.taskInfo.Remove(itemToRemove);
+
+            taskInfo.DataOfTask = ApiService.GetJsonInfo(taskInfo.MapToBLLTask());
+            taskInfo.LastDateTime = DateTime.Now;           
+
+            var cron = new Cron().CronSetting(user.MapToBLLUser());
+            user.taskInfo.Last().EmailSheduler = cron;
+            cron.Start();
+
+            HttpContext.Session.Set<User>("user", user);
+            user.taskInfo.Add(taskInfo);
+            _serviceTask.Update(taskInfo.MapToBLLTask());
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        [ActionName("Delete")]
+        public IActionResult ConfirmDelete(int? id)
+        {
+            if (id != null)
+            {
+                User user = HttpContext.Session.Get<User>("user");
+                var item = (DateTime)TempData["data"];
+
+                var task = user.taskInfo.FirstOrDefault(x => x.Id == id);
+                TempData["data"] = task.LastDateTime;
+
+                if (task != null)
+                    return View(task);
+            }
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(TaskInfo task)
+        {
+            if (task != null)
+            {
+                User user = HttpContext.Session.Get<User>("user");
+
+                var itemToRemove = user.taskInfo.SingleOrDefault(r => r.Id == task.Id);
+                if (itemToRemove != null)
+                    user.taskInfo.Remove(itemToRemove);
+
+                _serviceTask.Delete(itemToRemove.MapToBLLTask());
+                HttpContext.Session.Set<User>("user", user);
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            return NotFound();
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id != null)
+            {
+                User user = HttpContext.Session.Get<User>("user");
+
+                var task = user.taskInfo.FirstOrDefault(p => p.Id == id);
+                if (task != null)
+                    return View(task);
+            }
+
+            return NotFound();
+        }
     }
 }

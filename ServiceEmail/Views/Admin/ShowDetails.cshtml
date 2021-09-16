@@ -1,0 +1,40 @@
+﻿@{
+    Layout = null;
+}
+
+@*@model UserDataBaseUI.Models.UserViewModel*@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Show</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div>
+
+        <table border="1">
+            <tr>
+                <td width="100">Task name</td>
+                <td width="100">Description</td>
+                <td width="100">When the task starts</td>
+                <td width="100">Frequency of receiving data in days</td>
+                <td width="100">Time when the task started</td>
+            </tr>
+
+            @foreach (var t in ViewBag.Tasks)
+            {
+                <tr>
+                    <td width="100">@t.Name</td>
+                    <td width="100">@t.Description</td>
+                    <td width="100">@t.MomentTaskStarts</td>
+                    <td width="100">@t.PeriodicityTask</td>
+                    <td width="100">@t.LastDateTime</td>
+                </tr>
+            }
+        </table>
+    </div>
+</body>
+</html>

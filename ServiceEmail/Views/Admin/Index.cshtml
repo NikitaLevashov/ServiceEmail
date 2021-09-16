@@ -1,0 +1,72 @@
+﻿@{
+    Layout = null;
+}
+
+@model List<ServiceEmail.UI.Models.UserModel.User>;
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Users</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<style>
+    div {
+        width: 30%;
+        background: gray;
+        padding: 20px;
+        -webkit-box-sizing: border-box;
+        border-width: 2px;
+        border-color: palevioletred;
+    }
+
+    tr:hover {
+        background: #d5e6a2;
+    }
+</style>
+
+<body>
+    <h3><b>Service usage statistics</b></h3>
+    <table border="1">
+        <tr>
+            <td width="100" style="font-weight: bold">Name</td>
+            <td width="100" style="font-weight: bold">Info</td>
+            <td width="100" style="font-weight: bold">Details of task</td>
+        </tr>
+    </table>
+
+    @{
+        var item = 0;
+    }
+
+    @for (int i = 0; i <= @Model.Count-1; i++)
+    {
+        item = i;
+
+        <table border="1">
+            <tr>
+                <td width="100">@Model[i].Name</td>
+                <td width="100">@Model[i].LastName</td>
+                <td width="100" style="color: blue; text-decoration: underline"; class="@Model[i].Id">Details</td>
+            </tr>
+        </table>
+    }
+    <h2></h2>
+
+    <p id='mydiv1'></p>
+
+    <script>
+        for (let i = 0; i <= @Model.Count; i++) {$(document).ready(function () {
+            $('.' + i).click(function () {
+                $.get("/Admin/ShowDetails?positionUserOfTableInView=" + i, function(data) {
+                    $("#mydiv1").html(data);
+                });
+            });
+        });
+    }
+    </script>
+</body>
+</html>

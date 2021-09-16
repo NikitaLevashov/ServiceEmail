@@ -2,7 +2,7 @@
     ViewData["Title"] = "Home Page";
 }
 
-@model ServiceEmail.UI.Models.User.User
+@model ServiceEmail.UI.Models.UserModel.User
 
 @{
     Layout = null;
@@ -29,9 +29,8 @@
                         <table class="table mb-4">
                             <thead>
                                 <tr>
-                                    <th scope="col">Name.</th>
-                                    <th scope="col">Description</th>
-                                    <th scope="col"></th>
+                                    <th scope="col">Name using api</th>
+                                    <th scope="col"</th>
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
@@ -39,12 +38,13 @@
                              {
                                 <tbody>
                                     <tr>
-                                        <th scope="row">1</th>
-                                        <td>@t.Description</td>
+                                        <td>@t.Name</td>
+                                        <td></td>
                                         <td>@t.LastDateTime</td>
                                         <td>
-                                            <a asp-action="Index" asp-controller="Home" type="submit" class="btn btn-danger">Delete</a>
-                                            <a asp-action="Index" asp-controller="Home" type="submit" class="btn btn-success ms-1">Finished</a>
+                                            <a asp-action="Delete" asp-controller="Task" asp-route-id="@t.Id" type="submit" class="btn btn-danger">Delete</a>
+                                            <a asp-action="Edit" asp-controller="Task" asp-route-id="@t.Id" type="submit" class="btn btn-success ms-1">Edit</a>
+                                            <a asp-action="Details" asp-controller="Task" asp-route-id="@t.Id" asp-route-name="@t.Name" type="submit" class="btn btn-success ms-1">Details</a>
                                         </td>
                                     </tr>
                                </tbody>
@@ -59,6 +59,9 @@
 <div>
     @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
     <a asp-action="Index">Back to List</a>
+</div>
+<div>
+    <a asp-controller="Account" asp-action="Logout">Logout</a>
 </div>
 
 

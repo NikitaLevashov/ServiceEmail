@@ -1,0 +1,59 @@
+﻿@model ServiceEmail.UI.Models.TaskModel.TaskInfo
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<style>
+    body {
+        background: #000000;
+        color: #fc0;
+    }
+</style>
+
+<h1>Details</h1>
+
+<div>
+
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Task name:
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            Description of the task:
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            Time when the task started:
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LastDateTime)
+        </dd>
+        <dt class="col-sm-2">
+            Frequency of receiving data in day:
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PeriodicityTask)
+        </dd>
+        <dt class="col-sm-2">
+            When the task starts:
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MomentTaskStarts)
+        </dd>
+        <dt class = "col-sm-2">
+            Setting up a task:
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AppSettings)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-controller="Home" asp-action="Index">Back to list</a>
+</div>
