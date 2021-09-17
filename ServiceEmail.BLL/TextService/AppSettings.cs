@@ -6,7 +6,7 @@
         public const string MetalPrice = "MetalPrice";
         public const string Coronavirus = "Coronavirus";
         public const string ThreadCount = "5";
-        public const string EmailApiService = "arhangel205@mail.ru";
-        public const string PasswordApiService = "20021992";
+        public const string EmailApiService = "emailservicetest@mail.ru";
+        public const string PasswordApiService = "ivanov123456";
     }
 }

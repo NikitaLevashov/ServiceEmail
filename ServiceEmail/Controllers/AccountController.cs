@@ -11,9 +11,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ServiceEmail.UI.Controllers
 {
+    [Authorize(Roles = "admin, user")]
     public class AccountController : Controller
     {
         private readonly IUserService _service;
@@ -27,6 +29,7 @@ namespace ServiceEmail.UI.Controllers
         {
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
@@ -48,6 +51,7 @@ namespace ServiceEmail.UI.Controllers
             }
             return View(model);
         }
+
         [HttpGet]
         public IActionResult Register()
         {

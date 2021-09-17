@@ -5,7 +5,6 @@ using ServiceEmail.BLL.ModelBLL.User;
 using ServiceEmail.DAL.Interfaces;
 using System.Collections.Generic;
 
-
 namespace ServiceEmail.BLL.Service
 {
     public class UserService : IUserService
@@ -17,6 +16,6 @@ namespace ServiceEmail.BLL.Service
         }
         public void Create(UserBLL user) => _repository.Create(user.MapToUserDAL());
         public IEnumerable<UserBLL> GetAll()
-            => _repository.GetAll().MapToEnumerableBLLUsers();
+            =>  _repository.GetAll().MapToEnumerableBLLUsers();
     }
 }

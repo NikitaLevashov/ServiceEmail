@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace ServiceEmail.UI.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class AdminController : Controller
     {
         private readonly IUserService _service;
@@ -15,16 +16,12 @@ namespace ServiceEmail.UI.Controllers
         {
             _service = service ?? throw new ArgumentNullException();
         }
-
-        [Authorize(Roles = "admin")]
         public ActionResult Index()
         {
             var users = _service.GetAll().MapToEnumerableUsers().ToList();
 
             return View(users);
         }
-
-        [Authorize(Roles = "admin")]
         public async Task<ActionResult> ShowDetails(int positionUserOfTableInView)
         {
             var user = await Task.Run(() => _service.GetAll().FirstOrDefault(x => x.Id == positionUserOfTableInView));

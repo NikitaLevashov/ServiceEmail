@@ -16,15 +16,14 @@ namespace ServiceEmail.BLL.CronService
         {
             using (MemoryStream stream = new MemoryStream(Encoding.ASCII.GetBytes(UserHelper.user.taskInfo.Last().DataOfTask)))
             {
-                MailAddress from = new MailAddress("arhangel205@mail.ru", $"{UserHelper.user.taskInfo.Last().Name})"); 
+                MailAddress from = new MailAddress($"{AppSettings.EmailApiService}", "Nik"); 
                 MailAddress to = new MailAddress(UserHelper.user.Email);
                 MailMessage m = new MailMessage(from, to);
                 ContentType ct = new ContentType("application/octet-stream");
-                ct.Name = "message.csv";                
-
+                ct.Name = "message.csv";  
                 m.Attachments.Add(new Attachment(stream, ct));
                 m.Subject = "Mike";
-                m.Body = "<h2>Письмо-тест работы smtp-клиента</h2>";
+                m.Body = "<h2>Message-test</h2>";
                 m.IsBodyHtml = true;
                 SmtpClient smtp = new SmtpClient("smtp.mail.ru", 2525);
                 smtp.Credentials = new NetworkCredential(AppSettings.EmailApiService, AppSettings.PasswordApiService);

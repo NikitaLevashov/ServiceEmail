@@ -11,9 +11,6 @@ namespace ServiceEmail.DAL.Interfaces
     public interface IUserRepository
     {
         IEnumerable<UserDL> GetAll();
-        //UserDAL GetById(int id);
         void Create(UserDL item);
-        //void Update(UserDAL item);
-        //void Delete(TaskInfoDAL id);
     }
 }

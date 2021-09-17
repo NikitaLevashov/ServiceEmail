@@ -5,11 +5,7 @@ using ServiceEmail.BLL.ModelBLL.MetalPrice;
 using ServiceEmail.BLL.ModelBLL.TaskInfoBLL;
 using ServiceEmail.BLL.ModelBLL.WeatherInfo;
 using ServiceEmail.BLL.TextService;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace ServiceEmail.BLL.ApiService
 {

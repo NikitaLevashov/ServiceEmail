@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ServiceEmail.BLL.ApiService;
 using ServiceEmail.BLL.CronService;
 using ServiceEmail.BLL.Interfaces;
@@ -12,13 +13,12 @@ using System.Threading.Tasks;
 
 namespace ServiceEmail.UI.Controllers
 {
+    [Authorize(Roles = "user")]
     public class TaskController : Controller
     {
-        private readonly IUserService _service;
         private readonly ITaskService _serviceTask;
         public TaskController(IUserService service, ITaskService serviceTask)
         {
-            _service = service ?? throw new ArgumentNullException();
             _serviceTask = serviceTask ?? throw new ArgumentNullException();
         }
 
@@ -31,16 +31,17 @@ namespace ServiceEmail.UI.Controllers
         [HttpPost]
         public IActionResult Create(TaskInfo taskInfo)
         {
-            User user = HttpContext.Session.Get<User>("user");            
+            User user = HttpContext.Session.Get<User>("user");    
+            
             taskInfo.DataOfTask = ApiService.GetJsonInfo(taskInfo.MapToBLLTask());
-
             taskInfo.LastDateTime = DateTime.Now;
             taskInfo.UserId = user.Id;
-            user.taskInfo.Add(taskInfo);
 
             var cron = new Cron().CronSetting(user.MapToBLLUser());
-            user.taskInfo.Last().EmailSheduler = cron;
-            cron.Start();
+            cron.Start(taskInfo.MapToBLLTask());
+            taskInfo.EmailSheduler = cron;
+
+            user.taskInfo.Add(taskInfo);
 
             _serviceTask.Create(taskInfo.MapToBLLTask());
             HttpContext.Session.Set<User>("user", user);
@@ -61,20 +62,22 @@ namespace ServiceEmail.UI.Controllers
         public IActionResult Edit(TaskInfo taskInfo)
         {
             User user = HttpContext.Session.Get<User>("user");
+            var userHelp = user;
 
             var itemToRemove = user.taskInfo.SingleOrDefault(r => r.Id == taskInfo.Id);
             if (itemToRemove != null)
                 user.taskInfo.Remove(itemToRemove);
 
             taskInfo.DataOfTask = ApiService.GetJsonInfo(taskInfo.MapToBLLTask());
-            taskInfo.LastDateTime = DateTime.Now;           
-
+            taskInfo.LastDateTime = DateTime.Now;
+            
             var cron = new Cron().CronSetting(user.MapToBLLUser());
-            user.taskInfo.Last().EmailSheduler = cron;
-            cron.Start();
+            cron.Start(taskInfo.MapToBLLTask());
+            taskInfo.EmailSheduler = cron;
+
+            user.taskInfo.Add(taskInfo);
 
             HttpContext.Session.Set<User>("user", user);
-            user.taskInfo.Add(taskInfo);
             _serviceTask.Update(taskInfo.MapToBLLTask());
 
             return RedirectToAction("Index", "Home");
@@ -87,10 +90,8 @@ namespace ServiceEmail.UI.Controllers
             if (id != null)
             {
                 User user = HttpContext.Session.Get<User>("user");
-                var item = (DateTime)TempData["data"];
 
                 var task = user.taskInfo.FirstOrDefault(x => x.Id == id);
-                TempData["data"] = task.LastDateTime;
 
                 if (task != null)
                     return View(task);
@@ -107,11 +108,13 @@ namespace ServiceEmail.UI.Controllers
                 User user = HttpContext.Session.Get<User>("user");
 
                 var itemToRemove = user.taskInfo.SingleOrDefault(r => r.Id == task.Id);
+                itemToRemove.EmailSheduler?.Stop(itemToRemove.MapToBLLTask());
+
                 if (itemToRemove != null)
                     user.taskInfo.Remove(itemToRemove);
 
                 _serviceTask.Delete(itemToRemove.MapToBLLTask());
-                HttpContext.Session.Set<User>("user", user);
+                 HttpContext.Session.Set<User>("user", user);
 
                 return RedirectToAction("Index", "Home");
             }

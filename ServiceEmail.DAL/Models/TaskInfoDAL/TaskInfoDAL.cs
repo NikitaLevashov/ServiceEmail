@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ServiceEmail.DAL.Models.TaskInfoDAL
+﻿namespace ServiceEmail.DAL.Models.TaskInfoDAL
 {
     public class TaskInfoDAL
     {

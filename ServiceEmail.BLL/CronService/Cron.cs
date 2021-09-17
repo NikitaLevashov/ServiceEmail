@@ -12,7 +12,6 @@ namespace ServiceEmail.BLL.CronService
         public EmailScheduler CronSetting(UserBLL user)
         {
             UserHelper.user = user;
-
             return emailScheduler;
         }
     }

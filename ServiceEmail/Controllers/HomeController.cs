@@ -10,16 +10,15 @@ using System.Threading.Tasks;
 
 namespace ServiceEmail.Controllers
 {
+    [Authorize(Roles = "user")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
 
-        [Authorize(Roles ="user")]
         public async Task<IActionResult> Index()
         {
             User person = await Task.Run(() => HttpContext.Session.Get<User>("user"));
