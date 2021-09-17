@@ -25,7 +25,6 @@ namespace ServiceEmail.UI.Controllers
         public async Task<ActionResult> ShowDetails(int positionUserOfTableInView)
         {
             var user = await Task.Run(() => _service.GetAll().FirstOrDefault(x => x.Id == positionUserOfTableInView));
-
             ViewBag.Tasks = user.MapToUser().taskInfo;
 
             return PartialView();
