@@ -36,14 +36,16 @@ namespace ServiceEmail.BLL.Mapping
                   ForMember(dest => dest.LastName, opt => opt.MapFrom(c => c.LastName)).
                   ForMember(dest => dest.Password, opt => opt.MapFrom(c => c.Password)).
                   ForMember(dest => dest.Email, opt => opt.MapFrom(c => c.Email)).
-                  ForMember(dest => dest.taskInfo, opt => opt.MapFrom(c => c.taskInfo)).
+                  ForMember(dest => dest.TaskInfo, opt => opt.MapFrom(c => c.TaskInfo)).
                   ForMember(dest => dest.Role, opt => opt.MapFrom(c => c.Role));
 
             }).CreateMapper();
 
             var userBLL = mapper.Map<UserDL, UserBLL>(userDAL);
+            if (userBLL == null)
+                return null;
 
-            foreach (var r in userBLL.taskInfo)
+            foreach (var r in userBLL.TaskInfo)
                 r.UserId = userDAL.Id;
 
             return userBLL;
@@ -74,14 +76,14 @@ namespace ServiceEmail.BLL.Mapping
                   ForMember(dest => dest.LastName, opt => opt.MapFrom(c => c.LastName)).
                   ForMember(dest => dest.Password, opt => opt.MapFrom(c => c.Password)).
                   ForMember(dest => dest.Email, opt => opt.MapFrom(c => c.Email)).
-                  ForMember(dest => dest.taskInfo, opt => opt.MapFrom(c => c.taskInfo)).
+                  ForMember(dest => dest.TaskInfo, opt => opt.MapFrom(c => c.TaskInfo)).
                   ForMember(dest => dest.Role, opt => opt.MapFrom(c => c.Role));
 
             }).CreateMapper();
 
             var userDAL = mapper.Map<UserBLL, UserDL>(userBLL);
 
-            foreach (var r in userDAL.taskInfo)
+            foreach (var r in userDAL.TaskInfo)
                 r.UserId = userBLL.Id;
 
             return userDAL;
@@ -112,7 +114,7 @@ namespace ServiceEmail.BLL.Mapping
                   ForMember(dest => dest.LastName, opt => opt.MapFrom(c => c.LastName)).
                   ForMember(dest => dest.Password, opt => opt.MapFrom(c => c.Password)).
                   ForMember(dest => dest.Email, opt => opt.MapFrom(c => c.Email)).
-                  ForMember(dest => dest.taskInfo, opt => opt.MapFrom(c => c.taskInfo)).
+                  ForMember(dest => dest.TaskInfo, opt => opt.MapFrom(c => c.TaskInfo)).
                   ForMember(dest => dest.Role, opt => opt.MapFrom(c => c.Role));
 
             }).CreateMapper();
@@ -147,7 +149,7 @@ namespace ServiceEmail.BLL.Mapping
                   ForMember(dest => dest.LastName, opt => opt.MapFrom(c => c.LastName)).
                   ForMember(dest => dest.Password, opt => opt.MapFrom(c => c.Password)).
                   ForMember(dest => dest.Email, opt => opt.MapFrom(c => c.Email)).
-                  ForMember(dest => dest.taskInfo, opt => opt.MapFrom(c => c.taskInfo)).
+                  ForMember(dest => dest.TaskInfo, opt => opt.MapFrom(c => c.TaskInfo)).
                   ForMember(dest => dest.Role, opt => opt.MapFrom(c => c.Role));               
 
             }).CreateMapper();
@@ -156,7 +158,7 @@ namespace ServiceEmail.BLL.Mapping
 
             foreach(var t in userBLLs)
             {
-                foreach(var r in t.taskInfo)
+                foreach(var r in t.TaskInfo)
                 {
                     r.UserId = t.Id;
                 }

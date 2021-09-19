@@ -25,7 +25,7 @@ namespace ServiceEmail.BLL.CronService
                 .WithIdentity($"{task.MomentTaskStarts}", $"{task.Name}")
                 .StartAt(task.MomentTaskStarts)
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInHours(task.PeriodicityTask) 
+                    .WithIntervalInSeconds(task.PeriodicityTask) 
                     .RepeatForever())
                 .Build();
 

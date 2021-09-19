@@ -12,10 +12,11 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using ServiceEmail.BLL.ModelBLL.User;
+using ServiceEmail.BLL.ModelBLL.UserBLL;
 
 namespace ServiceEmail.UI.Controllers
 {
-    [Authorize(Roles = "admin, user")]
     public class AccountController : Controller
     {
         private readonly IUserService _service;
@@ -36,8 +37,13 @@ namespace ServiceEmail.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = _service.GetAll().MapToEnumerableUsers().FirstOrDefault(u 
-                    => u.Email == model.Email && u.Password == model.Password);
+                UserBLL userLogin = new UserBLL
+                {
+                    Email = model.Email,
+                    Password = model.Password
+                };
+
+                User user = _service.GetUser(userLogin).MapToUser();
 
                 if (user != null)
                 {
@@ -64,15 +70,29 @@ namespace ServiceEmail.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = _service.GetAll().MapToEnumerableUsers().FirstOrDefault(u 
-                    => u.Email == model.Email && u.Password == model.Password);
+                UserBLL userLogin = new UserBLL
+                {
+                    Email = model.Email,
+                    Password = model.Password
+                };
+
+                User user = _service.GetUser(userLogin).MapToUser();
 
                 if (user == null)
                 {
-                    _service.Create(new User { Email = model.Email, Password = model.Password,
-                        LastName = model.LastName, Name = model.Name, Role = new Role { Id = 1} }.MapToBLLUser());
+                    var userNew = new User
+                    {
+                        Email = model.Email,
+                        Password = model.Password,
+                        LastName = model.LastName,
+                        Name = model.Name,
+                        RoleId = 1,
+                        Role = new Role { Id = 1 , Name = "user"}
+                    };
 
-                    await Authenticate(user);
+                    _service.Create(userNew.MapToBLLUser());
+
+                    await Authenticate(userNew);
 
                     return RedirectToAction("Login", "Account");
                 }

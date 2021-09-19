@@ -11,6 +11,6 @@ namespace ServiceEmail.DAL.Models.UserDAL
         public string Email { get; set; }
         public string Password { get; set; }
         public RoleDL Role { get; set; }
-        public List<TaskInfoDAL.TaskInfoDAL> taskInfo { get; set; }
+        public List<TaskInfoDAL.TaskInfoDAL> TaskInfo { get; set; }
     }
 }

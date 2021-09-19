@@ -7,9 +7,7 @@ using RestSharp;
 using ServiceEmail.DAL.DataBase;
 using ServiceEmail.DAL.Repository;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace ServiceEmail
 {
@@ -36,7 +34,7 @@ namespace ServiceEmail
             var services = scope.ServiceProvider;
             try
             {
-                SeedData.SeedDatabase();
+                new SeedData().SeedDatabase();
             }
             catch (Exception ex)
             {

@@ -1,0 +1,7 @@
+{
+  "ContentType": "application/octet-stream",
+  "CSV": "message.csv",
+  "Subject": "Mike",
+  "Host": "smtp.mail.ru",
+  "Port": "2525"
+}

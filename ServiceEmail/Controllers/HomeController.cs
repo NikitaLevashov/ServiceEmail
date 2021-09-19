@@ -31,8 +31,7 @@ namespace ServiceEmail.Controllers
                 
             }
 
-            _logger.LogInformation("Getting user was successful");
-     
+            _logger.LogInformation("Getting user was successful");     
             return View(person);
         }
 

@@ -9,5 +9,6 @@ namespace ServiceEmail.BLL.Interfaces
     {
         IEnumerable<UserBLL> GetAll();
         void Create(UserBLL item);
+        public UserBLL GetUser(UserBLL user);
     }
 }

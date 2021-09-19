@@ -1,0 +1,8 @@
+{
+  "Host": "x-rapidapi-host",
+  "Key": "x-rapidapi-key",
+  "ValueKey": "1169d35dd1mshd13d0e1dc0bee19p111a91jsn22b9882a51d2",
+  "CoronaValueHost": "coronavirus-smartable.p.rapidapi.com",
+  "WeatherValueHost": "weatherapi-com.p.rapidapi.com",
+  "MetalPriceValueHost": "live-metal-prices.p.rapidapi.com"
+}

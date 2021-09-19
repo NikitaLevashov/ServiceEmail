@@ -1,10 +1,6 @@
 ﻿using ServiceEmail.DAL.Models.TaskInfoDAL;
 using ServiceEmail.DAL.Models.UserDAL;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ServiceEmail.DAL.Interfaces
 {
@@ -12,5 +8,6 @@ namespace ServiceEmail.DAL.Interfaces
     {
         IEnumerable<UserDL> GetAll();
         void Create(UserDL item);
+        UserDL GetUser(UserDL userDAL);
     }
 }

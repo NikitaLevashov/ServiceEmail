@@ -17,5 +17,6 @@ namespace ServiceEmail.BLL.Service
         public void Create(UserBLL user) => _repository.Create(user.MapToUserDAL());
         public IEnumerable<UserBLL> GetAll()
             =>  _repository.GetAll().MapToEnumerableBLLUsers();
+        public UserBLL GetUser(UserBLL user) => _repository.GetUser(user.MapToUserDAL()).MapToBLLUser();
     }
 }
